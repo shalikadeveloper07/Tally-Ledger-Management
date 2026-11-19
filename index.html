@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tally Prime | Ledger Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #eef2f7; min-height: 100vh; }
+
+        /* Tally Prime White Header */
+        .tally-header {
+            background: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        /* Tab buttons */
+        .tab-active {
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+        }
+        .tab-inactive {
+            background: #f8fafc;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+        .tab-inactive:hover { color: #1e3a8a; border-color: #cbd5e1; background: #f1f5f9; }
+
+        /* Form container */
+        .tally-card {
+            background: #ffffff;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(30,64,128,0.08);
+        }
+
+        /* Labels */
+        label { color: #475569; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.4px; }
+
+        /* Inputs */
+        .tally-input {
+            background: #f8faff;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            border-radius: 5px;
+            padding: 7px 10px;
+            font-size: 0.82rem;
+            width: 100%;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .tally-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); background: #fff; }
+        .tally-input option { background: #fff; color: #1e293b; }
+
+        /* Buttons */
+        .btn-save {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            font-weight: 700;
+            padding: 9px 24px;
+            border-radius: 5px;
+            font-size: 0.82rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.35);
+        }
+        .btn-save:hover { background: linear-gradient(135deg, #1d4ed8, #1e3a8a); transform: translateY(-1px); }
+        .btn-reset {
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            padding: 9px 20px;
+            border-radius: 5px;
+            font-size: 0.82rem;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-reset:hover { border-color: #94a3b8; color: #475569; background: #f8fafc; }
+
+        /* Toast */
+        #toast { font-size: 0.82rem; border-radius: 6px; }
+
+        @media print {
+            body { background: white !important; }
+            header, footer, .no-print { display: none !important; }
+            .tally-card { background: white !important; border: 1px solid #ccc !important; box-shadow: none !important; }
+            #reportSection { display: block !important; }
+            #addLedgerSection { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="tally-header sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
+            <!-- Title (Logo removed, Blue Theme on White Header) -->
+            <div>
+                <div style="color:#1e3a8a; font-weight:800; font-size:1.25rem; letter-spacing:0.5px; line-height:1.1;">Tally Prime</div>
+                <div style="color:#2563eb; font-size:0.68rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;">Ledger Management</div>
+            </div>
+            <!-- Tabs -->
+            <div class="flex items-center gap-2">
+                <button id="tabBtnAdd" onclick="switchTab('add')"
+                    class="tab-active px-5 py-2 rounded text-sm transition">
+                    <i class="fa-solid fa-plus mr-1 text-xs"></i> Add Ledger
+                </button>
+                <button id="tabBtnReport" onclick="switchTab('report')"
+                    class="tab-inactive px-5 py-2 rounded text-sm transition">
+                    <i class="fa-solid fa-table-list mr-1 text-xs"></i> Ledger Report
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+
+        <!-- ===== ADD LEDGER ===== -->
+        <section id="addLedgerSection" class="max-w-4xl mx-auto">
+            <div class="tally-card p-6">
+                <form id="addLedgerForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+
+                    <!-- Basic -->
+                    <div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-1">Ledger Name</label>
+                                <input type="text" id="fName" required class="tally-input">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Parent Group</label>
+                                <select id="fParent" required class="tally-input">
+                                    <option value="Capital Account">Capital Account</option>
+                                    <option value="Reserves & Surplus">Reserves & Surplus</option>
+                                    <option value="Current Liabilities">Current Liabilities</option>
+                                    <option value="Sundry Creditors">Sundry Creditors</option>
+                                    <option value="Duties & Taxes">Duties & Taxes</option>
+                                    <option value="Provisions">Provisions</option>
+                                    <option value="Loans (Liability)">Loans (Liability)</option>
+                                    <option value="Bank OD A/c">Bank OD A/c</option>
+                                    <option value="Secured Loans">Secured Loans</option>
+                                    <option value="Unsecured Loans">Unsecured Loans</option>
+                                    <option value="Fixed Assets">Fixed Assets</option>
+                                    <option value="Investments">Investments</option>
+                                    <option value="Current Assets">Current Assets</option>
+                                    <option value="Stock-in-Hand">Stock-in-Hand</option>
+                                    <option value="Sundry Debtors" selected>Sundry Debtors</option>
+                                    <option value="Cash-in-Hand">Cash-in-Hand</option>
+                                    <option value="Bank Accounts">Bank Accounts</option>
+                                    <option value="Deposits (Asset)">Deposits (Asset)</option>
+                                    <option value="Loans & Advances (Asset)">Loans & Advances (Asset)</option>
+                                    <option value="Miscellaneous Expenses (Asset)">Miscellaneous Expenses (Asset)</option>
+                                    <option value="Suspense A/c">Suspense A/c</option>
+                                    <option value="Sales Accounts">Sales Accounts</option>
+                                    <option value="Purchase Accounts">Purchase Accounts</option>
+                                    <option value="Direct Income">Direct Income</option>
+                                    <option value="Indirect Income">Indirect Income</option>
+                                    <option value="Direct Expenses">Direct Expenses</option>
+                                    <option value="Indirect Expenses">Indirect Expenses</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label class="block mb-1">Address Line 1</label>
+                                <input type="text" id="fAddress1" class="tally-input">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Address Line 2</label>
+                                <input type="text" id="fAddress2" class="tally-input">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                            <div>
+                                <label class="block mb-1">Address Line 3</label>
+                                <input type="text" id="fAddress3" class="tally-input">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Address Line 4</label>
+                                <input type="text" id="fAddress4" class="tally-input">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Address Line 5</label>
+                                <input type="text" id="fAddress5" class="tally-input">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block mb-1">Country</label>
+                                <input type="text" id="fCountry" value="India" class="tally-input" style="color:#64748b;">
+                            </div>
+                            <div>
+                                <label class="block mb-1">State</label>
+                                <select id="fState" class="tally-input">
+                                    <option value="">Select State</option>
+                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                    <option value="Assam">Assam</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Chhattisgarh">Chhattisgarh</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Goa">Goa</option>
+                                    <option value="Gujarat">Gujarat</option>
+                                    <option value="Haryana">Haryana</option>
+                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                    <option value="Jharkhand">Jharkhand</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Manipur">Manipur</option>
+                                    <option value="Meghalaya">Meghalaya</option>
+                                    <option value="Mizoram">Mizoram</option>
+                                    <option value="Nagaland">Nagaland</option>
+                                    <option value="Odisha">Odisha</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                    <option value="Sikkim">Sikkim</option>
+                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                    <option value="Telangana">Telangana</option>
+                                    <option value="Tripura">Tripura</option>
+                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                    <option value="Uttarakhand">Uttarakhand</option>
+                                    <option value="West Bengal">West Bengal</option>
+                                    <option value="Chandigarh">Chandigarh</option>
+                                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra & Nagar Haveli</option>
+                                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                    <option value="Ladakh">Ladakh</option>
+                                    <option value="Puducherry">Puducherry</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block mb-1">Pincode</label>
+                                <input type="text" id="fPincode" maxlength="6" class="tally-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GST & Tax -->
+                    <div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-1">GST Registration Type</label>
+                                <select id="fRegistrationType" class="tally-input">
+                                    <option value="Regular">Regular</option>
+                                    <option value="Composition">Composition</option>
+                                    <option value="Consumer">Consumer</option>
+                                    <option value="Unregistered">Unregistered</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block mb-1">GSTIN / UIN</label>
+                                <input type="text" id="fGstUIn" maxlength="15" oninput="handleGstInput(this)"
+                                    class="tally-input" style="font-family:monospace; text-transform:uppercase;">
+                            </div>
+                            <div>
+                                <label class="block mb-1">PAN / Income Tax Number</label>
+                                <input type="text" id="fPanItNo" maxlength="10"
+                                    oninput="this.value = this.value.toUpperCase()"
+                                    class="tally-input" style="font-family:monospace; text-transform:uppercase;">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Provide Bank Details?</label>
+                                <select id="fProvideBankDetails" class="tally-input">
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active/Inactive (Boolean isActive) -->
+                    <div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-1">Status</label>
+                                <select id="fIsActive" class="tally-input">
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="pt-4 flex items-center justify-end gap-3" style="border-top:1px solid #e2e8f0;">
+                        <button type="button" onclick="clearForm()" class="btn-reset">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                        </button>
+                        <button type="submit" id="submitBtn" class="btn-save">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i>
+                            <span id="submitBtnText">Save & Add Ledger</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ===== 2. LEDGER REPORT SECTION ===== -->
+        <section id="reportSection" class="hidden space-y-4">
+            <!-- Report Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+                <div class="overflow-x-auto min-h-[300px]">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                                <th class="py-3 px-4 text-center whitespace-nowrap">Line No</th>
+                                <th class="py-3 px-4">Ledger Name</th>
+                                <th class="py-3 px-4">Group (Parent)</th>
+                                <th class="py-3 px-4">Address</th>
+                                <th class="py-3 px-4">State</th>
+                                <th class="py-3 px-4">Pincode</th>
+                                <th class="py-3 px-4">GSTIN</th>
+                                <th class="py-3 px-4">PAN</th>
+                                <th class="py-3 px-4 text-center">Bank Details</th>
+                                <th class="py-3 px-4 text-center">Active/Inactive</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody" class="divide-y divide-slate-100">
+                            <!-- Populated via JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <div id="reportLoading" class="py-16 text-center">
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent mb-2"></div>
+                        <p class="text-sm font-medium text-slate-500">Loading ledger report...</p>
+                    </div>
+
+                    <div id="reportEmpty" class="hidden py-16 text-center">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-xl mb-3">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h4 class="text-base font-semibold text-slate-800">No Ledgers in Report</h4>
+                        <p class="text-xs text-slate-500 mt-1 mb-4">Click "Add Ledger" to record your first ledger.</p>
+                        <button onclick="switchTab('add')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition">
+                            Add Ledger Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed bottom-5 right-5 z-50 px-4 py-3 text-sm font-semibold shadow-xl" style="border-radius:6px;"></div>
+
+    <script>
+        const API_BASE = (window.location.protocol === 'http:' || window.location.protocol === 'https:') ? '' : 'http://localhost:3000';
+        let allLedgers = [], filteredReport = [];
+
+        const GST_STATE_MAP = {
+            "01":"Jammu and Kashmir","02":"Himachal Pradesh","03":"Punjab","04":"Chandigarh",
+            "05":"Uttarakhand","06":"Haryana","07":"Delhi","08":"Rajasthan","09":"Uttar Pradesh",
+            "10":"Bihar","11":"Sikkim","12":"Arunachal Pradesh","13":"Nagaland","14":"Manipur",
+            "15":"Mizoram","16":"Tripura","17":"Meghalaya","18":"Assam","19":"West Bengal",
+            "20":"Jharkhand","21":"Odisha","22":"Chhattisgarh","23":"Madhya Pradesh","24":"Gujarat",
+            "27":"Maharashtra","29":"Karnataka","30":"Goa","32":"Kerala","33":"Tamil Nadu",
+            "36":"Telangana","37":"Andhra Pradesh","38":"Ladakh"
+        };
+
+        window.addEventListener('DOMContentLoaded', () => { fetchLedgers(); });
+
+        function switchTab(tab) {
+            const addSec = document.getElementById('addLedgerSection');
+            const repSec = document.getElementById('reportSection');
+            const btnAdd = document.getElementById('tabBtnAdd');
+            const btnRep = document.getElementById('tabBtnReport');
+            if (tab === 'add') {
+                addSec.classList.remove('hidden');
+                repSec.classList.add('hidden');
+                btnAdd.className = 'tab-active px-5 py-2 rounded text-sm transition';
+                btnRep.className = 'tab-inactive px-5 py-2 rounded text-sm transition';
+            } else {
+                addSec.classList.add('hidden');
+                repSec.classList.remove('hidden');
+                btnAdd.className = 'tab-inactive px-5 py-2 rounded text-sm transition';
+                btnRep.className = 'tab-active px-5 py-2 rounded text-sm transition';
+                fetchLedgers();
+            }
+        }
+
+        function handleGstInput(input) {
+            const val = input.value.toUpperCase();
+            input.value = val;
+            if (val.length >= 2) {
+                const code = val.substring(0, 2);
+                if (GST_STATE_MAP[code]) {
+                    const sel = document.getElementById('fState');
+                    for (let opt of sel.options) {
+                        if (opt.value.toLowerCase().includes(GST_STATE_MAP[code].toLowerCase())) { sel.value = opt.value; break; }
+                    }
+                }
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('fName').value = '';
+            document.getElementById('fParent').value = 'Sundry Debtors';
+            document.getElementById('fAddress1').value = '';
+            document.getElementById('fAddress2').value = '';
+            document.getElementById('fAddress3').value = '';
+            document.getElementById('fAddress4').value = '';
+            document.getElementById('fAddress5').value = '';
+            document.getElementById('fCountry').value = 'India';
+            document.getElementById('fState').value = '';
+            document.getElementById('fPincode').value = '';
+            document.getElementById('fRegistrationType').value = 'Regular';
+            document.getElementById('fGstUIn').value = '';
+            document.getElementById('fPanItNo').value = '';
+            document.getElementById('fProvideBankDetails').value = 'No';
+            document.getElementById('fIsActive').value = 'true';
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('submitBtnText');
+            btn.disabled = true;
+            btnText.textContent = 'Saving...';
+
+            const isActiveBool = document.getElementById('fIsActive').value === 'true';
+
+            const payload = {
+                Name: document.getElementById('fName').value.trim(),
+                Parent: document.getElementById('fParent').value.trim(),
+                Address1: document.getElementById('fAddress1').value.trim(),
+                Address2: document.getElementById('fAddress2').value.trim(),
+                Address3: document.getElementById('fAddress3').value.trim(),
+                Address4: document.getElementById('fAddress4').value.trim(),
+                Address5: document.getElementById('fAddress5').value.trim(),
+                Country: document.getElementById('fCountry').value.trim(),
+                State: document.getElementById('fState').value,
+                Pincode: document.getElementById('fPincode').value.trim(),
+                RegistrationType: document.getElementById('fRegistrationType').value,
+                GstUIn: document.getElementById('fGstUIn').value.trim().toUpperCase(),
+                PanItNo: document.getElementById('fPanItNo').value.trim().toUpperCase(),
+                ProvideBankDetails: document.getElementById('fProvideBankDetails').value,
+                isActive: isActiveBool
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/api/ledger`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast('Ledger saved successfully!', 'success');
+                    clearForm();
+                    fetchLedgers();
+                } else {
+                    showToast(result.message || 'Failed to save', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Server error — is Node.js running on port 3000?', 'error');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Save & Add Ledger';
+            }
+        }
+
+        async function fetchLedgers() {
+            try {
+                const res = await fetch(`${API_BASE}/api/ledger`);
+                const result = await res.json();
+                if (result.success) {
+                    allLedgers = result.data || [];
+                    filteredReport = allLedgers;
+                    renderReportTable();
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('reportLoading').classList.add('hidden');
+                document.getElementById('reportEmpty').classList.remove('hidden');
+            }
+        }
+
+        function renderReportTable() {
+            const tbody = document.getElementById('reportTableBody');
+            const loading = document.getElementById('reportLoading');
+            const empty = document.getElementById('reportEmpty');
+
+            loading.classList.add('hidden');
+
+            if (filteredReport.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            tbody.innerHTML = filteredReport.map((l, idx) => {
+                const fullAddress = [l.Address1, l.Address2, l.Address3, l.Address4, l.Address5].filter(Boolean).join(', ');
+                const isInactive = l.isActive === false;
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-4 text-center text-xs text-slate-400 font-mono">${idx + 1}</td>
+                        <td class="py-3 px-4 font-semibold text-slate-900">${escapeHtml(l.Name || '')}</td>
+                        <td class="py-3 px-4 text-xs text-slate-700">
+                            ${escapeHtml(l.Parent || 'Sundry Debtors')}
+                        </td>
+                        <td class="py-3 px-4 text-xs text-slate-600 max-w-xs truncate" title="${escapeHtml(fullAddress)}">
+                            ${fullAddress ? escapeHtml(fullAddress) : '<span class="text-slate-400 italic">None</span>'}
+                        </td>
+                        <td class="py-3 px-4 text-xs text-slate-700">
+                            ${escapeHtml(l.State || '')}
+                        </td>
+                        <td class="py-3 px-4 text-xs font-mono text-slate-600">
+                            ${escapeHtml(l.Pincode || '')}
+                        </td>
+                        <td class="py-3 px-4 text-xs font-mono font-medium text-slate-800">
+                            ${escapeHtml(l.GstUIn || '')}
+                        </td>
+                        <td class="py-3 px-4 text-xs font-mono text-slate-700">
+                            ${escapeHtml(l.PanItNo || '')}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            ${l.ProvideBankDetails === 'Yes' 
+                                ? '<span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-medium">Yes</span>' 
+                                : '<span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-500">No</span>'}
+                        </td>
+                        <td class="py-3 px-4 text-center text-xs font-semibold ${isInactive ? 'text-rose-600' : 'text-emerald-600'}">
+                            ${isInactive ? 'Inactive' : 'Active'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.background = type === 'success' ? '#065f46' : '#7f1d1d';
+            t.style.color = type === 'success' ? '#6ee7b7' : '#fca5a5';
+            t.style.border = type === 'success' ? '1px solid #10b981' : '1px solid #ef4444';
+            t.classList.remove('hidden');
+            setTimeout(() => t.classList.add('hidden'), 2500);
+        }
+
+        function escapeHtml(str = '') {
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+    </script>
+</body>
+</html>

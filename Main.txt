@@ -1,0 +1,53 @@
+[#Menu:	GatewayofTally]
+	
+	Add : Item : Api Import Tool: Call: Ledger Import
+	
+[Function: Ledger Import]
+
+    001 : WALK COLLECTION : LedgerImportColl
+
+    002 : NEW OBJECT : Ledger
+    005 : SET VALUE : Name : $Name
+    006 : SET VALUE : Parent : "Sundry Debtors"
+	011: Insert Collection Object: LEDMAILINGDETAILS
+	011a:Set Value	: APPLICABLEFROM : "1-apr-2026"
+
+
+
+    010 : INSERT COLLECTION OBJECT : Address
+    020 : SET VALUE : Address : $Address1
+    030 : SET TARGET : ..
+	010x : INSERT COLLECTION OBJECT : Address
+    020x : SET VALUE : Address : $Address2
+    030x : SET TARGET : ..
+	010y : INSERT COLLECTION OBJECT : Address
+    020y : SET VALUE : Address : $Address3
+    030y : SET TARGET : ..
+	010z : INSERT COLLECTION OBJECT : Address
+    020z : SET VALUE : Address : $Address4
+    030z : SET TARGET : ..
+	010d : INSERT COLLECTION OBJECT : Address
+    020d : SET VALUE : Address : $Address5
+    030d : SET TARGET : ..
+	10 : Set Value : MAILINGNAME :$Name
+	11 : Set Value : COUNTRY : $Country
+	12 : Set Value: STATE :$State
+	12x: Set Value: Pincode :$Pincode
+	cc:Set Target:..
+	ff:Set Value:IncomeTaxNumber: $PanItNo
+;	ee:Set Value: : $ProvideBankDetails
+	14 : Insert Collection Object:LEDGSTREGDETAILS
+	15 : Set Value: APPLICABLEFROM :"20230401"
+	16 : Set Value:GSTREGISTRATIONTYPE :$RegistrationType
+	17 : Set Value:GSTIN :$GstUIn
+	18 : Set Target:..
+    040 : CREATE TARGET
+    050 : END WALK
+	
+[Collection: LedgerImportColl]
+	
+	Data Source:  HTTP JSON: "http://localhost:3000/api/ledger"
+	JSON Object Path:data:1
+	
+
+	
