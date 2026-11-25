@@ -209,8 +209,16 @@ app.use((req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-    console.log(`Tally API: http://localhost:${PORT}/api/ledger`);
+// Start Server
+const PORT = 3501;
+const HOST = "0.0.0.0";
+const DOMAIN = "http://v35011.22189.tallyprimecloud.in";
+
+app.listen(PORT, HOST, () => {
+    console.log("================================");
+    console.log("Node.js Server Started");
+    console.log(`Server URL: ${DOMAIN}:${PORT}`);
+    console.log(`Frontend: ${DOMAIN}:${PORT}`);
+    console.log(`Ledger API: ${DOMAIN}:${PORT}/api/ledger`);
+    console.log("================================");
 });
