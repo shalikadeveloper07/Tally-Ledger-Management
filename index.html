@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +8,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #eef2f7; min-height: 100vh; }
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+            min-height: 100vh;
+        }
 
         /* Tally Prime White Header */
         .tally-header {
             background: #ffffff;
             border-bottom: 2px solid #e2e8f0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
         }
 
         /* Tab buttons */
@@ -22,25 +29,36 @@
             background: #2563eb;
             color: #ffffff;
             font-weight: 700;
-            box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
         }
+
         .tab-inactive {
             background: #f8fafc;
             color: #475569;
             border: 1px solid #e2e8f0;
         }
-        .tab-inactive:hover { color: #1e3a8a; border-color: #cbd5e1; background: #f1f5f9; }
+
+        .tab-inactive:hover {
+            color: #1e3a8a;
+            border-color: #cbd5e1;
+            background: #f1f5f9;
+        }
 
         /* Form container */
         .tally-card {
             background: #ffffff;
             border: 1px solid #dbeafe;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(30,64,128,0.08);
+            box-shadow: 0 2px 10px rgba(30, 64, 128, 0.08);
         }
 
         /* Labels */
-        label { color: #475569; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.4px; }
+        label {
+            color: #475569;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+        }
 
         /* Inputs */
         .tally-input {
@@ -54,8 +72,17 @@
             transition: all 0.2s;
             outline: none;
         }
-        .tally-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); background: #fff; }
-        .tally-input option { background: #fff; color: #1e293b; }
+
+        .tally-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            background: #fff;
+        }
+
+        .tally-input option {
+            background: #fff;
+            color: #1e293b;
+        }
 
         /* Buttons */
         .btn-save {
@@ -68,9 +95,14 @@
             border: none;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.35);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
         }
-        .btn-save:hover { background: linear-gradient(135deg, #1d4ed8, #1e3a8a); transform: translateY(-1px); }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+            transform: translateY(-1px);
+        }
+
         .btn-reset {
             background: transparent;
             color: #64748b;
@@ -82,35 +114,65 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-reset:hover { border-color: #94a3b8; color: #475569; background: #f8fafc; }
+
+        .btn-reset:hover {
+            border-color: #94a3b8;
+            color: #475569;
+            background: #f8fafc;
+        }
 
         /* Toast */
-        #toast { font-size: 0.82rem; border-radius: 6px; }
+        #toast {
+            font-size: 0.82rem;
+            border-radius: 6px;
+        }
 
         @media print {
-            body { background: white !important; }
-            header, footer, .no-print { display: none !important; }
-            .tally-card { background: white !important; border: 1px solid #ccc !important; box-shadow: none !important; }
-            #reportSection { display: block !important; }
-            #addLedgerSection { display: none !important; }
+            body {
+                background: white !important;
+            }
+
+            header,
+            footer,
+            .no-print {
+                display: none !important;
+            }
+
+            .tally-card {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+            }
+
+            #reportSection {
+                display: block !important;
+            }
+
+            #addLedgerSection {
+                display: none !important;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Header -->
     <header class="tally-header sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
+        <div class="w-full px-4 sm:px-6 py-3 flex items-center justify-between">
             <!-- Title (Logo removed, Blue Theme on White Header) -->
             <div>
-                <div style="color:#1e3a8a; font-weight:800; font-size:1.25rem; letter-spacing:0.5px; line-height:1.1;">Tally Prime</div>
-                <div style="color:#2563eb; font-size:0.68rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;">Ledger Management</div>
+                <div style="color:#1e3a8a; font-weight:800; font-size:1.25rem; letter-spacing:0.5px; line-height:1.1;">
+                    Tally Prime</div>
+                <div
+                    style="color:#2563eb; font-size:0.68rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;">
+                    Ledger Management</div>
             </div>
             <!-- Tabs -->
             <div class="flex items-center gap-2">
                 <button id="tabBtnAdd" onclick="switchTab('add')"
                     class="tab-active px-5 py-2 rounded text-sm transition">
-                    <i class="fa-solid fa-plus mr-1 text-xs"></i> Add Ledger
+                    <i class="fa-solid fa-plus mr-1 text-xs"></i> <span id="tabAddLabel">Add Ledger</span>
                 </button>
                 <button id="tabBtnReport" onclick="switchTab('report')"
                     class="tab-inactive px-5 py-2 rounded text-sm transition">
@@ -120,20 +182,45 @@
         </div>
     </header>
 
-    <!-- Main -->
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+    <!-- Main (Full Edge-to-Edge Width) -->
+    <main class="w-full py-2 flex-1">
 
         <!-- ===== ADD LEDGER ===== -->
-        <section id="addLedgerSection" class="max-w-4xl mx-auto">
+        <section id="addLedgerSection" class="max-w-4xl mx-auto px-4 py-3">
             <div class="tally-card p-6">
-                <form id="addLedgerForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                <!-- Header (shows Edit mode status when opened from Ledger Report) -->
+                <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 id="formHeadingText" class="text-base sm:text-lg font-bold text-slate-800">Add New
+                                Ledger</h2>
+                            <span id="formEditBadge"
+                                class="hidden px-2 py-0.5 text-[11px] font-bold rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                                <i class="fa-solid fa-pen mr-1"></i> Editing Mode
+                            </span>
+                        </div>
+                        <p id="formSubheading" class="text-xs text-slate-500 mt-0.5">Fill in details to create a new
+                            ledger account.</p>
+                    </div>
+                    <button type="button" id="cancelEditBtn" onclick="clearForm()"
+                        class="hidden px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md border border-slate-300 transition flex items-center gap-1.5 shadow-xs"
+                        title="Cancel edit and switch back to Add New Ledger">
+                        <i class="fa-solid fa-xmark text-slate-500"></i> Cancel Edit
+                    </button>
+                </div>
+
+                <form id="addLedgerForm" onsubmit="handleFormSubmit(event)" onkeydown="handleFormEnterKey(event)"
+                    class="space-y-5">
+                    <input type="hidden" id="editingLedgerId" value="">
 
                     <!-- Basic -->
                     <div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block mb-1">Ledger Name</label>
-                                <input type="text" id="fName" required class="tally-input">
+                                <input type="text" id="fName" required class="tally-input"
+                                    onblur="checkDuplicateName(this.value)">
+                                <p id="nameDuplicateError" class="hidden mt-1 text-xs text-red-600 font-semibold">⚠️ This name already exists! Duplicate ledger not allowed.</p>
                             </div>
                             <div>
                                 <label class="block mb-1">Parent Group</label>
@@ -157,7 +244,8 @@
                                     <option value="Bank Accounts">Bank Accounts</option>
                                     <option value="Deposits (Asset)">Deposits (Asset)</option>
                                     <option value="Loans & Advances (Asset)">Loans & Advances (Asset)</option>
-                                    <option value="Miscellaneous Expenses (Asset)">Miscellaneous Expenses (Asset)</option>
+                                    <option value="Miscellaneous Expenses (Asset)">Miscellaneous Expenses (Asset)
+                                    </option>
                                     <option value="Suspense A/c">Suspense A/c</option>
                                     <option value="Sales Accounts">Sales Accounts</option>
                                     <option value="Purchase Accounts">Purchase Accounts</option>
@@ -199,7 +287,8 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                             <div>
                                 <label class="block mb-1">Country</label>
-                                <input type="text" id="fCountry" value="India" class="tally-input" style="color:#64748b;">
+                                <input type="text" id="fCountry" value="India" class="tally-input"
+                                    style="color:#64748b;">
                             </div>
                             <div>
                                 <label class="block mb-1">State</label>
@@ -235,7 +324,8 @@
                                     <option value="Uttarakhand">Uttarakhand</option>
                                     <option value="West Bengal">West Bengal</option>
                                     <option value="Chandigarh">Chandigarh</option>
-                                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra & Nagar Haveli</option>
+                                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra & Nagar Haveli
+                                    </option>
                                     <option value="Jammu and Kashmir">Jammu and Kashmir</option>
                                     <option value="Ladakh">Ladakh</option>
                                     <option value="Puducherry">Puducherry</option>
@@ -268,12 +358,15 @@
                             <div>
                                 <label class="block mb-1">PAN / Income Tax Number</label>
                                 <input type="text" id="fPanItNo" maxlength="10"
-                                    oninput="this.value = this.value.toUpperCase()"
-                                    class="tally-input" style="font-family:monospace; text-transform:uppercase;">
+                                    oninput="this.value = this.value.toUpperCase()" class="tally-input"
+                                    style="font-family:monospace; text-transform:uppercase;">
                             </div>
                             <div>
                                 <label class="block mb-1">Provide Bank Details?</label>
-                                <select id="fProvideBankDetails" class="tally-input">
+                                <select id="fProvideBankDetails" class="tally-input w-full cursor-pointer"
+                                    onchange="handleProvideBankDetailsChange(this.value)"
+                                    onclick="if(this.value === 'Yes') openBankDetailsModal()"
+                                    onkeydown="if(event.key==='Enter'&&this.value==='Yes'){event.preventDefault();openBankDetailsModal();}">
                                     <option value="No">No</option>
                                     <option value="Yes">Yes</option>
                                 </select>
@@ -297,10 +390,10 @@
                     <!-- Buttons -->
                     <div class="pt-4 flex items-center justify-end gap-3" style="border-top:1px solid #e2e8f0;">
                         <button type="button" onclick="clearForm()" class="btn-reset">
-                            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Reset / New
                         </button>
                         <button type="submit" id="submitBtn" class="btn-save">
-                            <i class="fa-solid fa-floppy-disk mr-1"></i>
+                            <i id="submitBtnIcon" class="fa-solid fa-floppy-disk mr-1"></i>
                             <span id="submitBtnText">Save & Add Ledger</span>
                         </button>
                     </div>
@@ -308,24 +401,31 @@
             </div>
         </section>
 
-        <!-- ===== 2. LEDGER REPORT SECTION ===== -->
-        <section id="reportSection" class="hidden space-y-4">
-            <!-- Report Table -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-                <div class="overflow-x-auto min-h-[300px]">
+        <!-- ===== 2. LEDGER REPORT SECTION (EDGE-TO-EDGE FULL WIDTH) ===== -->
+        <section id="reportSection" class="hidden w-full">
+            <!-- Report Table (Edge-to-Edge Full Width, No Outer Margin/Padding) -->
+            <div class="bg-white border-y border-slate-200 shadow-xs overflow-hidden w-full">
+                <div class="overflow-x-auto min-h-[350px] w-full">
                     <table class="w-full text-left border-collapse text-sm">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                            <tr
+                                class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
                                 <th class="py-3 px-4 text-center whitespace-nowrap">Line No</th>
-                                <th class="py-3 px-4">Ledger Name</th>
-                                <th class="py-3 px-4">Group (Parent)</th>
+                                <th class="py-3 px-4 whitespace-nowrap">Ledger Name</th>
+                                <th class="py-3 px-4 whitespace-nowrap">Group (Parent)</th>
                                 <th class="py-3 px-4">Address</th>
-                                <th class="py-3 px-4">State</th>
-                                <th class="py-3 px-4">Pincode</th>
-                                <th class="py-3 px-4">GSTIN</th>
-                                <th class="py-3 px-4">PAN</th>
-                                <th class="py-3 px-4 text-center">Bank Details</th>
-                                <th class="py-3 px-4 text-center">Active/Inactive</th>
+                                <th class="py-3 px-4 whitespace-nowrap">State</th>
+                                <th class="py-3 px-4 whitespace-nowrap">Pincode</th>
+                                <th class="py-3 px-4 whitespace-nowrap">GSTIN</th>
+                                <th class="py-3 px-4 whitespace-nowrap">PAN</th>
+                                <th class="py-3 px-4 text-center whitespace-nowrap leading-tight">Transaction<br>Type
+                                </th>
+                                <th class="py-3 px-4 whitespace-nowrap">A/c No.</th>
+                                <th class="py-3 px-4 whitespace-nowrap">IFS Code</th>
+                                <th class="py-3 px-4 whitespace-nowrap">Bank Name</th>
+                                <th class="py-3 px-4 whitespace-nowrap">UPI ID</th>
+                                <th class="py-3 px-4 text-center whitespace-nowrap">Status</th>
+                                <th class="py-3 px-4 text-center whitespace-nowrap">Action</th>
                             </tr>
                         </thead>
                         <tbody id="reportTableBody" class="divide-y divide-slate-100">
@@ -334,17 +434,21 @@
                     </table>
 
                     <div id="reportLoading" class="py-16 text-center">
-                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent mb-2"></div>
+                        <div
+                            class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent mb-2">
+                        </div>
                         <p class="text-sm font-medium text-slate-500">Loading ledger report...</p>
                     </div>
 
                     <div id="reportEmpty" class="hidden py-16 text-center">
-                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-xl mb-3">
+                        <div
+                            class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-xl mb-3">
                             <i class="fa-solid fa-folder-open"></i>
                         </div>
                         <h4 class="text-base font-semibold text-slate-800">No Ledgers in Report</h4>
                         <p class="text-xs text-slate-500 mt-1 mb-4">Click "Add Ledger" to record your first ledger.</p>
-                        <button onclick="switchTab('add')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition">
+                        <button onclick="switchTab('add')"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition">
                             Add Ledger Now
                         </button>
                     </div>
@@ -355,23 +459,393 @@
     </main>
 
     <!-- Toast -->
-    <div id="toast" class="hidden fixed bottom-5 right-5 z-50 px-4 py-3 text-sm font-semibold shadow-xl" style="border-radius:6px;"></div>
+    <div id="toast" class="hidden fixed bottom-5 right-5 z-[60] px-4 py-3 text-sm font-semibold shadow-xl"
+        style="border-radius:6px;"></div>
+
+    <!-- ===== TALLY PRIME BANK DETAILS MODAL ===== -->
+    <div id="bankDetailsModal" class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4"
+        style="background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(2px);">
+        <div
+            class="relative w-full max-w-3xl bg-white shadow-2xl rounded-sm overflow-hidden border border-slate-300 font-sans">
+
+            <!-- Title Bar: Bank Details for: <Ledger Name> with Close Button -->
+            <div class="py-2.5 px-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                <div class="flex-1 text-center">
+                    <span class="text-sm font-semibold text-slate-700">Bank Details for: </span>
+                    <span id="modalLedgerName" class="text-sm font-bold text-slate-900 font-sans">Nn</span>
+                </div>
+                <button type="button" onclick="closeBankDetailsModal()"
+                    class="text-slate-400 hover:text-slate-700 p-1 text-base transition leading-none"
+                    title="Close (Esc)">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Card Body with Left Form + Right Transaction Types Menu -->
+            <div class="p-6 flex flex-col md:flex-row gap-6 relative min-h-[260px] bg-white">
+
+                <!-- Left Details Column -->
+                <div class="flex-1 space-y-4">
+                    <!-- Transaction Type Heading & Field -->
+                    <div>
+                        <div class="text-xs font-bold text-slate-800 mb-1 border-b border-slate-200 pb-1">Transaction
+                            Type</div>
+                        <div class="relative w-full max-w-xs mt-1">
+                            <input type="text" id="mTxTypeInput" value="e-Fund Transfer" onfocus="showTxTypeList()"
+                                onclick="showTxTypeList()" oninput="filterTxTypeList(this.value)"
+                                onkeydown="handleTxTypeKeydown(event)" autocomplete="off"
+                                class="w-full border border-sky-400 bg-amber-50 focus:bg-amber-100 text-slate-900 font-semibold px-2.5 py-1 text-xs shadow-inner outline-none transition cursor-pointer"
+                                placeholder="Select Transaction Type">
+                        </div>
+                    </div>
+
+                    <!-- Bank Account Form Rows (A/c No, IFS Code, Bank Name, and UPI ID when UPI) -->
+                    <div id="bankFieldsContainer" class="pt-2 space-y-2.5 text-xs text-slate-800">
+                        <div class="flex items-center">
+                            <span class="w-24 font-medium text-slate-700">A/c No.</span>
+                            <span class="mx-2 text-slate-500 font-bold">:</span>
+                            <input type="text" id="mAccountNo" oninput="syncBankDetailsState()"
+                                onfocus="hideTxTypeList()" onkeydown="handleAccountNoKeydown(event)"
+                                class="border border-slate-300 focus:border-blue-500 focus:bg-amber-50 px-2 py-1 text-xs font-mono w-56 rounded-none outline-none transition"
+                                placeholder="Enter Account Number">
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-24 font-medium text-slate-700">IFS Code</span>
+                            <span class="mx-2 text-slate-500 font-bold">:</span>
+                            <input type="text" id="mIfscCode" onfocus="hideTxTypeList()" maxlength="11"
+                                oninput="this.value = this.value.toUpperCase(); syncBankDetailsState();"
+                                onkeydown="handleIfscKeydown(event)"
+                                class="border border-slate-300 focus:border-blue-500 focus:bg-amber-50 px-2 py-1 text-xs font-mono uppercase w-56 rounded-none outline-none transition"
+                                placeholder="e.g. HDFC0001234">
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-24 font-medium text-slate-700">Bank Name</span>
+                            <span class="mx-2 text-slate-500 font-bold">:</span>
+                            <input type="text" id="mBankName" oninput="syncBankDetailsState()"
+                                onfocus="hideTxTypeList()" onkeydown="handleBankNameKeydown(event)"
+                                class="border border-slate-300 focus:border-blue-500 focus:bg-amber-50 px-2 py-1 text-xs w-72 rounded-none outline-none transition"
+                                placeholder="Enter Bank Name">
+                        </div>
+                        <!-- UPI ID Row (Shown when Transaction Type is UPI) -->
+                        <div id="upiRow" class="hidden flex items-center">
+                            <span class="w-24 font-medium text-slate-700">UPI ID</span>
+                            <span class="mx-2 text-slate-500 font-bold">:</span>
+                            <input type="text" id="mUpiId" oninput="syncBankDetailsState()" onfocus="hideTxTypeList()"
+                                onkeydown="handleUpiIdKeydown(event)"
+                                class="border border-slate-300 focus:border-blue-500 focus:bg-amber-50 px-2 py-1 text-xs font-mono w-72 rounded-none outline-none transition"
+                                placeholder="e.g. name@okhdfcbank or mobile@upi">
+                        </div>
+                    </div>
+
+                    <!-- Cheque Form Rows (Shown ONLY when Transaction Type is Cheque) -->
+                    <div id="chequeFieldsContainer" class="hidden pt-2 space-y-2.5 text-xs text-slate-800">
+                        <div class="flex items-center">
+                            <span class="w-24 font-medium text-slate-700">Cross Using</span>
+                            <span class="mx-2 text-slate-500 font-bold">:</span>
+                            <input type="text" id="mCrossUsing" onfocus="hideTxTypeList()"
+                                onkeydown="handleCrossUsingKeydown(event)"
+                                class="border border-slate-300 focus:border-blue-500 focus:bg-amber-50 px-2 py-1 text-xs w-72 rounded-none outline-none transition"
+                                placeholder="e.g. A/c Payee" value="A/c Payee">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Tally-Style "Transaction Types" Pop-up Menu (Hidden until Transaction Type is focused/typed) -->
+                <div id="txTypeListPopup"
+                    class="hidden w-full md:w-56 shrink-0 border border-blue-600 shadow-md bg-white self-start transition-all">
+                    <!-- Blue Menu Header -->
+                    <div
+                        class="bg-[#1e40af] text-white px-2.5 py-1 text-xs font-bold flex items-center justify-between">
+                        <span>Transaction Types</span>
+                        <button type="button" onclick="hideTxTypeList()"
+                            class="text-[10px] text-blue-200 hover:text-white">✕</button>
+                    </div>
+                    <!-- Menu List Items -->
+                    <div class="py-1 text-xs font-sans">
+                        <div onclick="selectTransactionType('Cheque')" id="itemTxCheque"
+                            class="tx-type-item px-3 py-1 cursor-pointer hover:bg-amber-100 flex items-center text-slate-800">
+                            Cheque
+                        </div>
+                        <div onclick="selectTransactionType('e-Fund Transfer')" id="itemTxeFund"
+                            class="tx-type-item px-3 py-1 cursor-pointer bg-amber-300 font-bold text-slate-900 flex items-center">
+                            e-Fund Transfer
+                        </div>
+                        <div onclick="selectTransactionType('UPI')" id="itemTxUPI"
+                            class="tx-type-item px-3 py-1 cursor-pointer hover:bg-amber-100 flex items-center text-slate-800">
+                            UPI
+                        </div>
+                        <div onclick="selectTransactionType('Others')" id="itemTxOthers"
+                            class="tx-type-item px-3 py-1 cursor-pointer hover:bg-amber-100 flex items-center text-slate-800">
+                            Others
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Card Footer Actions: Tally Accept / Back -->
+            <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-3">
+                <button type="button" onclick="closeBankDetailsModal()"
+                    class="px-4 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-300 hover:bg-slate-100 rounded-sm transition">
+                    Back (Esc)
+                </button>
+                <button type="button" onclick="saveBankDetailsModal()"
+                    class="px-5 py-1.5 text-xs font-bold text-white bg-[#1e40af] hover:bg-[#1d4ed8] rounded-sm transition shadow-xs">
+                    Accept (Save)
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== DELETE CONFIRM MODAL ===== -->
+    <div id="deleteConfirmModal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl border border-red-100 w-full max-w-sm mx-4 overflow-hidden">
+            <div class="bg-red-600 px-5 py-3 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-white text-lg"></i>
+                <span class="text-white font-bold text-sm tracking-wide">Delete Ledger</span>
+            </div>
+            <div class="px-6 py-5">
+                <p class="text-slate-700 text-sm mb-1">Are you sure! you want to delete this entry?</p>
+                <p class="text-slate-900 font-bold text-sm bg-red-50 border border-red-200 rounded px-3 py-2 mt-2"
+                    id="deleteConfirmName"></p>
+                <p id="deleteModalError" class="hidden text-xs text-red-600 font-semibold mt-3 bg-red-50 border border-red-200 rounded px-2.5 py-1.5"></p>
+            </div>
+            <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
+                <button type="button" onclick="closeDeleteModal()"
+                    class="px-4 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-300 hover:bg-slate-100 rounded transition">
+                    Cancel
+                </button>
+                <button type="button" id="deleteConfirmBtn" onclick="executeDeleteLedger()"
+                    class="px-5 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded transition shadow-sm inline-flex items-center gap-1.5">
+                    <i class="fa-solid fa-trash"></i> Yes, Delete </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const API_BASE = (window.location.protocol === 'http:' || window.location.protocol === 'https:') ? '' : 'http://localhost:3000';
         let allLedgers = [], filteredReport = [];
+        let currentBankDetails = {
+            TransactionType: 'e-Fund Transfer',
+            AccountNo: '',
+            IfscCode: '',
+            BankName: '',
+            UpiId: '',
+            CrossUsing: 'A/c Payee'
+        };
 
         const GST_STATE_MAP = {
-            "01":"Jammu and Kashmir","02":"Himachal Pradesh","03":"Punjab","04":"Chandigarh",
-            "05":"Uttarakhand","06":"Haryana","07":"Delhi","08":"Rajasthan","09":"Uttar Pradesh",
-            "10":"Bihar","11":"Sikkim","12":"Arunachal Pradesh","13":"Nagaland","14":"Manipur",
-            "15":"Mizoram","16":"Tripura","17":"Meghalaya","18":"Assam","19":"West Bengal",
-            "20":"Jharkhand","21":"Odisha","22":"Chhattisgarh","23":"Madhya Pradesh","24":"Gujarat",
-            "27":"Maharashtra","29":"Karnataka","30":"Goa","32":"Kerala","33":"Tamil Nadu",
-            "36":"Telangana","37":"Andhra Pradesh","38":"Ladakh"
+            "01": "Jammu and Kashmir", "02": "Himachal Pradesh", "03": "Punjab", "04": "Chandigarh",
+            "05": "Uttarakhand", "06": "Haryana", "07": "Delhi", "08": "Rajasthan", "09": "Uttar Pradesh",
+            "10": "Bihar", "11": "Sikkim", "12": "Arunachal Pradesh", "13": "Nagaland", "14": "Manipur",
+            "15": "Mizoram", "16": "Tripura", "17": "Meghalaya", "18": "Assam", "19": "West Bengal",
+            "20": "Jharkhand", "21": "Odisha", "22": "Chhattisgarh", "23": "Madhya Pradesh", "24": "Gujarat",
+            "27": "Maharashtra", "29": "Karnataka", "30": "Goa", "32": "Kerala", "33": "Tamil Nadu",
+            "36": "Telangana", "37": "Andhra Pradesh", "38": "Ladakh"
         };
 
         window.addEventListener('DOMContentLoaded', () => { fetchLedgers(); });
+
+        // Form field order for Enter key navigation (Tally-style)
+        const FORM_FIELD_ORDER = [
+            'fName', 'fParent',
+            'fAddress1', 'fAddress2',
+            'fAddress3', 'fAddress4', 'fAddress5',
+            'fCountry', 'fState', 'fPincode',
+            'fRegistrationType', 'fGstUIn', 'fPanItNo',
+            'fProvideBankDetails', 'fIsActive',
+            'submitBtn'
+        ];
+
+        function focusPrevFormField(currentId) {
+            const idx = FORM_FIELD_ORDER.indexOf(currentId);
+            if (idx > 0) {
+                const prevEl = document.getElementById(FORM_FIELD_ORDER[idx - 1]);
+                if (prevEl) {
+                    prevEl.focus();
+                    if (prevEl.select) prevEl.select();
+                }
+            }
+        }
+
+        function focusNextFormField(currentId) {
+            const idx = FORM_FIELD_ORDER.indexOf(currentId);
+            if (idx !== -1 && idx < FORM_FIELD_ORDER.length - 1) {
+                const nextEl = document.getElementById(FORM_FIELD_ORDER[idx + 1]);
+                if (nextEl) {
+                    nextEl.focus();
+                    if (nextEl.select) nextEl.select();
+                }
+            }
+        }
+
+        function handleFormEnterKey(e) {
+            const tag = e.target.tagName;
+            if (tag === 'TEXTAREA') return;
+
+            // Backspace / Left Arrow / Up Arrow -> previous (left) field
+            if (e.key === 'Backspace' || e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                if (tag === 'SELECT') {
+                    if (e.key === 'Backspace' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        focusPrevFormField(e.target.id);
+                    }
+                    return;
+                }
+                if (tag === 'BUTTON') {
+                    e.preventDefault();
+                    focusPrevFormField(e.target.id);
+                    return;
+                }
+                if (tag === 'INPUT') {
+                    const isAtStart = e.target.value === '' || (e.target.selectionStart === 0 && e.target.selectionEnd === 0);
+                    if (e.key === 'ArrowUp' || isAtStart) {
+                        e.preventDefault();
+                        focusPrevFormField(e.target.id);
+                    }
+                    return;
+                }
+            }
+
+            // Right Arrow -> next (right) field
+            if (e.key === 'ArrowRight') {
+                if (tag === 'SELECT' || tag === 'BUTTON') {
+                    e.preventDefault();
+                    focusNextFormField(e.target.id);
+                    return;
+                }
+                if (tag === 'INPUT') {
+                    const len = e.target.value.length;
+                    const isAtEnd = len === 0 || (e.target.selectionStart === len && e.target.selectionEnd === len);
+                    if (isAtEnd) {
+                        e.preventDefault();
+                        focusNextFormField(e.target.id);
+                    }
+                    return;
+                }
+            }
+
+            if (e.key !== 'Enter') return;
+
+            e.preventDefault();
+
+            // Submit button pe Enter = submit
+            if (e.target.id === 'submitBtn') {
+                handleFormSubmit(e);
+                return;
+            }
+
+            // "Provide Bank Details?" = Yes pe modal kholo
+            if (e.target.id === 'fProvideBankDetails' && e.target.value === 'Yes') {
+                openBankDetailsModal();
+                return;
+            }
+
+            // Next field focus
+            focusNextFormField(e.target.id);
+        }
+
+        // ───── DELETE LEDGER ─────────────────────────────────────────────
+        let _deleteTargetId = null;
+
+        function confirmDeleteLedger(id) {
+            _deleteTargetId = id;
+            const ledger = allLedgers.find(l => String(l._id) === String(id));
+            const name = ledger ? ledger.Name : 'Unknown';
+            document.getElementById('deleteConfirmName').textContent = name;
+            const errBox = document.getElementById('deleteModalError');
+            if (errBox) { errBox.textContent = ''; errBox.classList.add('hidden'); }
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            _deleteTargetId = null;
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        async function executeDeleteLedger() {
+            const targetId = _deleteTargetId;
+            if (!targetId) return;
+            const btn = document.getElementById('deleteConfirmBtn');
+            const errBox = document.getElementById('deleteModalError');
+            if (errBox) { errBox.textContent = ''; errBox.classList.add('hidden'); }
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Deleting...';
+            try {
+                const res = await fetch(`${API_BASE}/api/ledger/${encodeURIComponent(targetId)}`, { method: 'DELETE' });
+                const text = await res.text();
+                let result = {};
+                try { result = JSON.parse(text); } catch { result = { success: false, message: text || 'Unexpected server response' }; }
+
+                if (res.ok && result.success) {
+                    closeDeleteModal();
+                    allLedgers = allLedgers.filter(l => String(l._id) !== String(targetId));
+                    filteredReport = filteredReport.filter(l => String(l._id) !== String(targetId));
+                    renderReportTable();
+
+                    if (document.getElementById('editingLedgerId').value === String(targetId)) {
+                        clearForm();
+                    }
+
+                    showToast('Ledger deleted successfully!', 'success');
+                    fetchLedgers();
+                } else {
+                    const msg = res.status === 404 && result.message === 'API endpoint not found'
+                        ? 'Server restart required! Please restart Node.js (node Index.js) and try again.'
+                        : (result.message || 'Delete failed');
+                    if (errBox) { errBox.textContent = msg; errBox.classList.remove('hidden'); }
+                    showToast(msg, 'error');
+                }
+            } catch (err) {
+                console.error('Delete error:', err);
+                const msg = 'Server error — is Node.js running on port 3000?';
+                if (errBox) { errBox.textContent = msg; errBox.classList.remove('hidden'); }
+                showToast(msg, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-trash"></i> Yes, Delete';
+            }
+        }
+
+        // Real-time duplicate name check on blur
+        function checkDuplicateName(val) {
+            const name = (val || '').trim().toLowerCase();
+            const editingId = document.getElementById('editingLedgerId').value;
+            const errEl = document.getElementById('nameDuplicateError');
+            const inp = document.getElementById('fName');
+            if (!name) { errEl.classList.add('hidden'); return; }
+
+            const isDuplicate = allLedgers.some(l =>
+                l.Name && l.Name.trim().toLowerCase() === name &&
+                (!editingId || String(l._id) !== String(editingId))
+            );
+            if (isDuplicate) {
+                errEl.classList.remove('hidden');
+                inp.style.borderColor = '#ef4444';
+                inp.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
+            } else {
+                errEl.classList.add('hidden');
+                inp.style.borderColor = '';
+                inp.style.boxShadow = '';
+            }
+            return isDuplicate;
+        }
+
+        // Escape key to close bank details modal or delete modal
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeBankDetailsModal();
+                closeDeleteModal();
+            }
+        });
 
         function switchTab(tab) {
             const addSec = document.getElementById('addLedgerSection');
@@ -406,8 +880,409 @@
             }
         }
 
+        /* ===== TALLY PRIME BANK DETAILS LOGIC ===== */
+        function handleProvideBankDetailsChange(val) {
+            if (val === 'Yes') {
+                openBankDetailsModal();
+            } else {
+                currentBankDetails = { TransactionType: 'e-Fund Transfer', AccountNo: '', IfscCode: '', BankName: '', UpiId: '', CrossUsing: 'A/c Payee' };
+            }
+        }
+
+        const TX_TYPES = ['Cheque', 'e-Fund Transfer', 'UPI', 'Others'];
+
+        function showTxTypeList() {
+            const popup = document.getElementById('txTypeListPopup');
+            if (popup) popup.classList.remove('hidden');
+        }
+
+        function hideTxTypeList() {
+            const popup = document.getElementById('txTypeListPopup');
+            if (popup) popup.classList.add('hidden');
+        }
+
+        function syncBankDetailsState() {
+            const txType = document.getElementById('mTxTypeInput')?.value.trim() || currentBankDetails.TransactionType || 'e-Fund Transfer';
+            const acc = document.getElementById('mAccountNo')?.value.trim() || '';
+            const ifsc = document.getElementById('mIfscCode')?.value.trim().toUpperCase() || '';
+            const bName = document.getElementById('mBankName')?.value.trim() || '';
+            const upi = document.getElementById('mUpiId')?.value.trim() || '';
+            const cross = document.getElementById('mCrossUsing')?.value.trim() || 'A/c Payee';
+
+            currentBankDetails = {
+                TransactionType: txType,
+                AccountNo: acc,
+                IfscCode: ifsc,
+                BankName: bName,
+                UpiId: upi,
+                CrossUsing: cross
+            };
+        }
+
+        function updateTxTypeFieldsVisibility(type) {
+            const bankBox = document.getElementById('bankFieldsContainer');
+            const upiRow = document.getElementById('upiRow');
+            const chequeBox = document.getElementById('chequeFieldsContainer');
+
+            if (type === 'Cheque') {
+                if (bankBox) bankBox.classList.add('hidden');
+                if (chequeBox) chequeBox.classList.remove('hidden');
+            } else {
+                if (chequeBox) chequeBox.classList.add('hidden');
+                if (bankBox) bankBox.classList.remove('hidden');
+                if (upiRow) {
+                    if (type === 'UPI') {
+                        upiRow.classList.remove('hidden');
+                    } else {
+                        upiRow.classList.add('hidden');
+                    }
+                }
+            }
+        }
+
+        function selectTransactionType(type) {
+            currentBankDetails.TransactionType = type;
+            const input = document.getElementById('mTxTypeInput');
+            if (input) input.value = type;
+
+            updateTxTypeHighlight(type);
+            updateTxTypeFieldsVisibility(type);
+            hideTxTypeList();
+
+            if (type === 'Cheque') {
+                const crossInput = document.getElementById('mCrossUsing');
+                if (crossInput) {
+                    crossInput.focus();
+                    crossInput.select();
+                }
+            } else {
+                const accInput = document.getElementById('mAccountNo');
+                if (accInput) {
+                    accInput.focus();
+                    accInput.select();
+                }
+            }
+        }
+
+        function updateTxTypeHighlight(selectedType) {
+            const items = {
+                'Cheque': 'itemTxCheque',
+                'e-Fund Transfer': 'itemTxeFund',
+                'UPI': 'itemTxUPI',
+                'Others': 'itemTxOthers'
+            };
+            for (let key in items) {
+                const el = document.getElementById(items[key]);
+                if (el) {
+                    if (key === selectedType) {
+                        el.className = 'tx-type-item px-3 py-1 cursor-pointer bg-amber-300 font-bold text-slate-900 flex items-center';
+                    } else {
+                        el.className = 'tx-type-item px-3 py-1 cursor-pointer hover:bg-amber-100 flex items-center text-slate-800';
+                    }
+                }
+            }
+        }
+
+        function handleTxTypeKeydown(e) {
+            showTxTypeList();
+            const currentVal = document.getElementById('mTxTypeInput').value.trim();
+            let idx = TX_TYPES.indexOf(currentVal);
+            if (idx === -1) idx = 1;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                idx = (idx + 1) % TX_TYPES.length;
+                document.getElementById('mTxTypeInput').value = TX_TYPES[idx];
+                currentBankDetails.TransactionType = TX_TYPES[idx];
+                updateTxTypeHighlight(TX_TYPES[idx]);
+                updateTxTypeFieldsVisibility(TX_TYPES[idx]);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                idx = (idx - 1 + TX_TYPES.length) % TX_TYPES.length;
+                document.getElementById('mTxTypeInput').value = TX_TYPES[idx];
+                currentBankDetails.TransactionType = TX_TYPES[idx];
+                updateTxTypeHighlight(TX_TYPES[idx]);
+                updateTxTypeFieldsVisibility(TX_TYPES[idx]);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                selectTransactionType(document.getElementById('mTxTypeInput').value.trim() || 'e-Fund Transfer');
+            } else if (e.key === 'Escape') {
+                hideTxTypeList();
+            }
+        }
+
+        function filterTxTypeList(query) {
+            showTxTypeList();
+            const q = query.toLowerCase().trim();
+            TX_TYPES.forEach(type => {
+                const items = {
+                    'Cheque': 'itemTxCheque',
+                    'e-Fund Transfer': 'itemTxeFund',
+                    'UPI': 'itemTxUPI',
+                    'Others': 'itemTxOthers'
+                };
+                const el = document.getElementById(items[type]);
+                if (el) {
+                    if (!q || type.toLowerCase().includes(q)) {
+                        el.style.display = 'flex';
+                    } else {
+                        el.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        function handleCrossUsingKeydown(e) {
+            const isAtStart = e.target.value === '' || (e.target.selectionStart === 0 && e.target.selectionEnd === 0);
+            if (e.key === 'ArrowUp' || (e.key === 'Backspace' && isAtStart)) {
+                e.preventDefault();
+                const txInput = document.getElementById('mTxTypeInput');
+                if (txInput) {
+                    txInput.focus();
+                    txInput.select();
+                    showTxTypeList();
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                saveBankDetailsModal();
+            }
+        }
+
+        function handleUpiIdKeydown(e) {
+            const isAtStart = e.target.value === '' || (e.target.selectionStart === 0 && e.target.selectionEnd === 0);
+            if (e.key === 'ArrowUp' || (e.key === 'Backspace' && isAtStart)) {
+                e.preventDefault();
+                const bName = document.getElementById('mBankName');
+                if (bName) {
+                    bName.focus();
+                    bName.select();
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                saveBankDetailsModal();
+            }
+        }
+
+        function handleAccountNoKeydown(e) {
+            const isAtStart = e.target.value === '' || (e.target.selectionStart === 0 && e.target.selectionEnd === 0);
+            if (e.key === 'ArrowUp' || (e.key === 'Backspace' && isAtStart)) {
+                e.preventDefault();
+                const txInput = document.getElementById('mTxTypeInput');
+                if (txInput) {
+                    txInput.focus();
+                    txInput.select();
+                    showTxTypeList();
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const ifsc = document.getElementById('mIfscCode');
+                if (ifsc) ifsc.focus();
+            }
+        }
+
+        function handleIfscKeydown(e) {
+            const isAtStart = e.target.value === '' || (e.target.selectionStart === 0 && e.target.selectionEnd === 0);
+            if (e.key === 'ArrowUp' || (e.key === 'Backspace' && isAtStart)) {
+                e.preventDefault();
+                const acc = document.getElementById('mAccountNo');
+                if (acc) {
+                    acc.focus();
+                    acc.select();
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const bName = document.getElementById('mBankName');
+                if (bName) bName.focus();
+            }
+        }
+
+        function handleBankNameKeydown(e) {
+            const isAtStart = e.target.value === '' || (e.target.selectionStart === 0 && e.target.selectionEnd === 0);
+            if (e.key === 'ArrowUp' || (e.key === 'Backspace' && isAtStart)) {
+                e.preventDefault();
+                const ifsc = document.getElementById('mIfscCode');
+                if (ifsc) {
+                    ifsc.focus();
+                    ifsc.select();
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const txType = document.getElementById('mTxTypeInput').value.trim();
+                if (txType === 'UPI') {
+                    const upi = document.getElementById('mUpiId');
+                    if (upi) {
+                        upi.focus();
+                        upi.select();
+                    }
+                } else {
+                    saveBankDetailsModal();
+                }
+            }
+        }
+
+        function openBankDetailsModal() {
+            const ledgerName = document.getElementById('fName').value.trim() || 'New Ledger';
+            document.getElementById('modalLedgerName').textContent = ledgerName;
+
+            const txType = currentBankDetails.TransactionType || 'e-Fund Transfer';
+            document.getElementById('mTxTypeInput').value = txType;
+            document.getElementById('mAccountNo').value = currentBankDetails.AccountNo || '';
+            document.getElementById('mIfscCode').value = currentBankDetails.IfscCode || '';
+            document.getElementById('mBankName').value = currentBankDetails.BankName || '';
+            document.getElementById('mUpiId').value = currentBankDetails.UpiId || '';
+            document.getElementById('mCrossUsing').value = currentBankDetails.CrossUsing || 'A/c Payee';
+
+            updateTxTypeHighlight(txType);
+            updateTxTypeFieldsVisibility(txType);
+            hideTxTypeList();
+
+            const modal = document.getElementById('bankDetailsModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => {
+                    const txInput = document.getElementById('mTxTypeInput');
+                    if (txInput) txInput.focus();
+                }, 100);
+            }
+        }
+
+        function saveBankDetailsModal() {
+            const txType = document.getElementById('mTxTypeInput').value.trim() || currentBankDetails.TransactionType || 'e-Fund Transfer';
+            currentBankDetails.TransactionType = txType;
+            currentBankDetails.AccountNo = document.getElementById('mAccountNo').value.trim();
+            currentBankDetails.IfscCode = document.getElementById('mIfscCode').value.trim().toUpperCase();
+            currentBankDetails.BankName = document.getElementById('mBankName').value.trim();
+            currentBankDetails.UpiId = document.getElementById('mUpiId').value.trim();
+            currentBankDetails.CrossUsing = document.getElementById('mCrossUsing').value.trim() || 'A/c Payee';
+
+            document.getElementById('fProvideBankDetails').value = 'Yes';
+            closeBankDetailsModal();
+            showToast('Bank details saved in form', 'success');
+        }
+
+        function closeBankDetailsModal() {
+            hideTxTypeList();
+            const modal = document.getElementById('bankDetailsModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+            // If closed without any bank details saved, revert select back to No
+            if (!currentBankDetails.AccountNo && !currentBankDetails.BankName && !currentBankDetails.IfscCode && !currentBankDetails.UpiId && (!currentBankDetails.CrossUsing || currentBankDetails.TransactionType !== 'Cheque')) {
+                document.getElementById('fProvideBankDetails').value = 'No';
+            }
+        }
+
+        function viewBankDetails(ledgerId) {
+            const ledger = allLedgers.find(l => String(l._id) === String(ledgerId));
+            if (!ledger) return;
+            const bd = ledger.BankDetails || {};
+            const txType = bd.TransactionType || ledger.TransactionType || 'e-Fund Transfer';
+            const accNo = bd.AccountNo || ledger.AccountNo || '';
+            const ifsc = bd.IfscCode || ledger.IfscCode || '';
+            const bName = bd.BankName || ledger.BankName || '';
+            const upi = bd.UpiId || ledger.UpiId || '';
+            const cross = bd.CrossUsing || ledger.CrossUsing || 'A/c Payee';
+
+            document.getElementById('modalLedgerName').textContent = ledger.Name || 'Ledger';
+            document.getElementById('mTxTypeInput').value = txType;
+            document.getElementById('mAccountNo').value = accNo;
+            document.getElementById('mIfscCode').value = ifsc;
+            document.getElementById('mBankName').value = bName;
+            document.getElementById('mUpiId').value = upi;
+            document.getElementById('mCrossUsing').value = cross;
+            updateTxTypeHighlight(txType);
+            updateTxTypeFieldsVisibility(txType);
+            hideTxTypeList();
+
+            const modal = document.getElementById('bankDetailsModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function openLedgerInForm(ledgerId) {
+            const ledger = allLedgers.find(l => String(l._id) === String(ledgerId));
+            if (!ledger) {
+                fetch(`${API_BASE}/api/ledger/${ledgerId}`)
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.success && res.data) {
+                            fillLedgerForm(res.data);
+                        } else {
+                            showToast('Ledger not found', 'error');
+                        }
+                    })
+                    .catch(() => showToast('Failed to load ledger', 'error'));
+                return;
+            }
+            fillLedgerForm(ledger);
+        }
+
+        function fillLedgerForm(ledger) {
+            switchTab('add');
+
+            document.getElementById('editingLedgerId').value = ledger._id;
+            document.getElementById('fName').value = ledger.Name || '';
+            document.getElementById('fParent').value = ledger.Parent || 'Sundry Debtors';
+            document.getElementById('fAddress1').value = ledger.Address1 || '';
+            document.getElementById('fAddress2').value = ledger.Address2 || '';
+            document.getElementById('fAddress3').value = ledger.Address3 || '';
+            document.getElementById('fAddress4').value = ledger.Address4 || '';
+            document.getElementById('fAddress5').value = ledger.Address5 || '';
+            document.getElementById('fCountry').value = ledger.Country || 'India';
+            document.getElementById('fState').value = ledger.State || '';
+            document.getElementById('fPincode').value = ledger.Pincode || '';
+            document.getElementById('fRegistrationType').value = ledger.RegistrationType || 'Regular';
+            document.getElementById('fGstUIn').value = ledger.GstUIn || '';
+            document.getElementById('fPanItNo').value = ledger.PanItNo || '';
+            document.getElementById('fProvideBankDetails').value = ledger.ProvideBankDetails || 'No';
+            document.getElementById('fIsActive').value = (ledger.isActive === false || ledger.isActive === 'false') ? 'false' : 'true';
+
+            // Populate Bank Details if available (nested BankDetails or direct root fields)
+            const bd = ledger.BankDetails || {};
+            const hasBankData = ledger.ProvideBankDetails === 'Yes' || Boolean(bd.AccountNo || ledger.AccountNo || bd.BankName || ledger.BankName || bd.UpiId || ledger.UpiId);
+
+            if (hasBankData) {
+                currentBankDetails = {
+                    TransactionType: bd.TransactionType || ledger.TransactionType || 'e-Fund Transfer',
+                    AccountNo: bd.AccountNo || ledger.AccountNo || '',
+                    IfscCode: bd.IfscCode || ledger.IfscCode || '',
+                    BankName: bd.BankName || ledger.BankName || '',
+                    UpiId: bd.UpiId || ledger.UpiId || '',
+                    CrossUsing: bd.CrossUsing || ledger.CrossUsing || 'A/c Payee'
+                };
+                document.getElementById('fProvideBankDetails').value = 'Yes';
+            } else {
+                currentBankDetails = { TransactionType: 'e-Fund Transfer', AccountNo: '', IfscCode: '', BankName: '', UpiId: '', CrossUsing: 'A/c Payee' };
+            }
+
+            // Update UI for Edit Mode
+            document.getElementById('formHeadingText').textContent = `Edit Ledger: ${ledger.Name}`;
+            document.getElementById('formEditBadge').classList.remove('hidden');
+            document.getElementById('formSubheading').textContent = `Modifying existing ledger record. Click "Save & Update Ledger" to save changes.`;
+            document.getElementById('submitBtnText').textContent = 'Save & Update Ledger';
+            const icon = document.getElementById('submitBtnIcon');
+            if (icon) icon.className = 'fa-solid fa-pen-to-square mr-1';
+            const cancelBtn = document.getElementById('cancelEditBtn');
+            if (cancelBtn) cancelBtn.classList.remove('hidden');
+            const tabLabel = document.getElementById('tabAddLabel');
+            if (tabLabel) tabLabel.textContent = 'Edit Ledger';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast(`Loaded "${ledger.Name}" for editing`, 'success');
+        }
+
         function clearForm() {
+            document.getElementById('editingLedgerId').value = '';
             document.getElementById('fName').value = '';
+            // Duplicate error reset
+            const errEl = document.getElementById('nameDuplicateError');
+            if (errEl) errEl.classList.add('hidden');
+            const inp = document.getElementById('fName');
+            if (inp) { inp.style.borderColor = ''; inp.style.boxShadow = ''; }
             document.getElementById('fParent').value = 'Sundry Debtors';
             document.getElementById('fAddress1').value = '';
             document.getElementById('fAddress2').value = '';
@@ -422,16 +1297,50 @@
             document.getElementById('fPanItNo').value = '';
             document.getElementById('fProvideBankDetails').value = 'No';
             document.getElementById('fIsActive').value = 'true';
+
+            // Reset Bank Details State
+            currentBankDetails = { TransactionType: 'e-Fund Transfer', AccountNo: '', IfscCode: '', BankName: '', UpiId: '', CrossUsing: 'A/c Payee' };
+            const crossInput = document.getElementById('mCrossUsing');
+            if (crossInput) crossInput.value = 'A/c Payee';
+
+            // Reset UI for Add Mode
+            document.getElementById('formHeadingText').textContent = 'Add New Ledger';
+            document.getElementById('formEditBadge').classList.add('hidden');
+            document.getElementById('formSubheading').textContent = 'Fill in details to create a new ledger account.';
+            document.getElementById('submitBtnText').textContent = 'Save & Add Ledger';
+            const icon = document.getElementById('submitBtnIcon');
+            if (icon) icon.className = 'fa-solid fa-floppy-disk mr-1';
+            const cancelBtn = document.getElementById('cancelEditBtn');
+            if (cancelBtn) cancelBtn.classList.add('hidden');
+            const tabLabel = document.getElementById('tabAddLabel');
+            if (tabLabel) tabLabel.textContent = 'Add Ledger';
         }
 
         async function handleFormSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const btnText = document.getElementById('submitBtnText');
+            const editingId = document.getElementById('editingLedgerId').value;
+            const isEditMode = Boolean(editingId);
+
+            // Frontend duplicate check before API call
+            const isDup = checkDuplicateName(document.getElementById('fName').value);
+            if (isDup) {
+                showToast('Duplicate ledger! This name already exists.', 'error');
+                document.getElementById('fName').focus();
+                return;
+            }
+
             btn.disabled = true;
-            btnText.textContent = 'Saving...';
+            btnText.textContent = isEditMode ? 'Updating...' : 'Saving...';
+
+            // Sync latest modal input values (A/c No, IFS Code, Bank Name, etc.)
+            syncBankDetailsState();
 
             const isActiveBool = document.getElementById('fIsActive').value === 'true';
+            const provideBank = document.getElementById('fProvideBankDetails').value;
+            const hasBankData = Boolean(currentBankDetails.AccountNo || currentBankDetails.BankName || currentBankDetails.IfscCode || currentBankDetails.UpiId || (currentBankDetails.TransactionType === 'Cheque' && currentBankDetails.CrossUsing));
+            const effectiveProvideBank = (provideBank === 'Yes' || hasBankData) ? 'Yes' : 'No';
 
             const payload = {
                 Name: document.getElementById('fName').value.trim(),
@@ -447,30 +1356,43 @@
                 RegistrationType: document.getElementById('fRegistrationType').value,
                 GstUIn: document.getElementById('fGstUIn').value.trim().toUpperCase(),
                 PanItNo: document.getElementById('fPanItNo').value.trim().toUpperCase(),
-                ProvideBankDetails: document.getElementById('fProvideBankDetails').value,
+                ProvideBankDetails: effectiveProvideBank,
+                BankDetails: effectiveProvideBank === 'Yes' ? currentBankDetails : null,
                 isActive: isActiveBool
             };
 
             try {
-                const res = await fetch(`${API_BASE}/api/ledger`, {
-                    method: 'POST',
+                const url = isEditMode ? `${API_BASE}/api/ledger/${editingId}` : `${API_BASE}/api/ledger`;
+                const method = isEditMode ? 'PUT' : 'POST';
+
+                const res = await fetch(url, {
+                    method: method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 const result = await res.json();
                 if (result.success) {
-                    showToast('Ledger saved successfully!', 'success');
+                    showToast(isEditMode ? 'Ledger updated successfully!' : 'Ledger saved successfully!', 'success');
                     clearForm();
                     fetchLedgers();
                 } else {
-                    showToast(result.message || 'Failed to save', 'error');
+                    showToast(result.message || (isEditMode ? 'Failed to update' : 'Failed to save'), 'error');
                 }
             } catch (err) {
                 console.error(err);
                 showToast('Server error — is Node.js running on port 3000?', 'error');
             } finally {
                 btn.disabled = false;
-                btnText.textContent = 'Save & Add Ledger';
+                const isStillEditing = Boolean(document.getElementById('editingLedgerId').value);
+                if (isStillEditing) {
+                    btnText.textContent = 'Save & Update Ledger';
+                    const icon = document.getElementById('submitBtnIcon');
+                    if (icon) icon.className = 'fa-solid fa-pen-to-square mr-1';
+                } else {
+                    btnText.textContent = 'Save & Add Ledger';
+                    const icon = document.getElementById('submitBtnIcon');
+                    if (icon) icon.className = 'fa-solid fa-floppy-disk mr-1';
+                }
             }
         }
 
@@ -482,11 +1404,17 @@
                     allLedgers = result.data || [];
                     filteredReport = allLedgers;
                     renderReportTable();
+                } else {
+                    // success false aane pe bhi loading hide karo
+                    document.getElementById('reportLoading').classList.add('hidden');
+                    document.getElementById('reportEmpty').classList.remove('hidden');
+                    showToast(result.message || 'Failed to load data', 'error');
                 }
             } catch (err) {
-                console.error(err);
+                console.error('fetchLedgers error:', err);
                 document.getElementById('reportLoading').classList.add('hidden');
                 document.getElementById('reportEmpty').classList.remove('hidden');
+                showToast('Cannot connect to server — is Node.js running?', 'error');
             }
         }
 
@@ -507,35 +1435,68 @@
             tbody.innerHTML = filteredReport.map((l, idx) => {
                 const fullAddress = [l.Address1, l.Address2, l.Address3, l.Address4, l.Address5].filter(Boolean).join(', ');
                 const isInactive = l.isActive === false;
+                const bd = l.BankDetails || {};
+                const acc = bd.AccountNo || l.AccountNo || '';
+                const bank = bd.BankName || l.BankName || '';
+                const ifsc = bd.IfscCode || l.IfscCode || '';
+                const upi = bd.UpiId || l.UpiId || '';
+                const cross = bd.CrossUsing || l.CrossUsing || '';
+                const txType = bd.TransactionType || l.TransactionType || (acc || bank || upi ? 'e-Fund Transfer' : '');
+                const hasBank = l.ProvideBankDetails === 'Yes' || Boolean(acc || bank || upi || cross || txType);
+
                 return `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3 px-4 text-center text-xs text-slate-400 font-mono">${idx + 1}</td>
-                        <td class="py-3 px-4 font-semibold text-slate-900">${escapeHtml(l.Name || '')}</td>
-                        <td class="py-3 px-4 text-xs text-slate-700">
+                    <tr class="hover:bg-slate-50 transition-colors text-xs font-normal">
+                        <td class="py-2.5 px-4 text-center text-slate-400 font-mono">${idx + 1}</td>
+                        <td class="py-2.5 px-4 text-slate-800 whitespace-nowrap">${escapeHtml(l.Name || '')}</td>
+                        <td class="py-2.5 px-4 text-slate-700 whitespace-nowrap">
                             ${escapeHtml(l.Parent || 'Sundry Debtors')}
                         </td>
-                        <td class="py-3 px-4 text-xs text-slate-600 max-w-xs truncate" title="${escapeHtml(fullAddress)}">
+                        <td class="py-2.5 px-4 text-slate-600 max-w-xs truncate" title="${escapeHtml(fullAddress)}">
                             ${fullAddress ? escapeHtml(fullAddress) : '<span class="text-slate-400 italic">None</span>'}
                         </td>
-                        <td class="py-3 px-4 text-xs text-slate-700">
+                        <td class="py-2.5 px-4 text-slate-700 whitespace-nowrap">
                             ${escapeHtml(l.State || '')}
                         </td>
-                        <td class="py-3 px-4 text-xs font-mono text-slate-600">
+                        <td class="py-2.5 px-4 font-mono text-slate-600 whitespace-nowrap">
                             ${escapeHtml(l.Pincode || '')}
                         </td>
-                        <td class="py-3 px-4 text-xs font-mono font-medium text-slate-800">
+                        <td class="py-2.5 px-4 font-mono text-slate-700 whitespace-nowrap">
                             ${escapeHtml(l.GstUIn || '')}
                         </td>
-                        <td class="py-3 px-4 text-xs font-mono text-slate-700">
+                        <td class="py-2.5 px-4 font-mono text-slate-700 whitespace-nowrap">
                             ${escapeHtml(l.PanItNo || '')}
                         </td>
-                        <td class="py-3 px-4 text-center">
-                            ${l.ProvideBankDetails === 'Yes' 
-                                ? '<span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-medium">Yes</span>' 
-                                : '<span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-500">No</span>'}
+                        <td class="py-2.5 px-4 text-center whitespace-nowrap text-slate-700">
+                            ${hasBank && txType
+                        ? `<span>${escapeHtml(txType)}</span>`
+                        : '<span class="text-slate-400 italic">None</span>'}
                         </td>
-                        <td class="py-3 px-4 text-center text-xs font-semibold ${isInactive ? 'text-rose-600' : 'text-emerald-600'}">
+                        <td class="py-2.5 px-4 font-mono text-slate-700 whitespace-nowrap">
+                            ${acc ? escapeHtml(acc) : '<span class="text-slate-400 italic font-normal">-</span>'}
+                        </td>
+                        <td class="py-2.5 px-4 font-mono text-slate-700 whitespace-nowrap uppercase">
+                            ${ifsc ? escapeHtml(ifsc) : '<span class="text-slate-400 italic font-normal">-</span>'}
+                        </td>
+                        <td class="py-2.5 px-4 text-slate-700 whitespace-nowrap">
+                            ${bank ? escapeHtml(bank) : '<span class="text-slate-400 italic">-</span>'}
+                        </td>
+                        <td class="py-2.5 px-4 whitespace-nowrap font-mono text-slate-700">
+                            ${upi
+                        ? `<span class="bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-200">${escapeHtml(upi)}</span>`
+                        : '<span class="text-slate-400 italic font-sans">-</span>'}
+                        </td>
+                        <td class="py-2.5 px-4 text-center whitespace-nowrap ${isInactive ? 'text-rose-600' : 'text-emerald-600'}">
                             ${isInactive ? 'Inactive' : 'Active'}
+                        </td>
+                        <td class="py-2.5 px-4 text-center whitespace-nowrap">
+                            <div class="inline-flex items-center gap-1.5">
+                                <button type="button" onclick="openLedgerInForm('${l._id}')" class="px-2.5 py-1 text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition inline-flex items-center gap-1 shadow-xs" title="Edit this ledger">
+                                    <i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit
+                                </button>
+                                <button type="button" onclick="confirmDeleteLedger('${l._id}')" class="px-2.5 py-1 text-xs text-red-700 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition inline-flex items-center gap-1 shadow-xs" title="Delete this ledger">
+                                    <i class="fa-solid fa-trash text-red-500"></i> Delete
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -553,8 +1514,9 @@
         }
 
         function escapeHtml(str = '') {
-            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
     </script>
 </body>
+
 </html>
