@@ -4,50 +4,135 @@
 	
 [Function: Ledger Import]
 
+	Variable:IfsccodeVar: String
     001 : WALK COLLECTION : LedgerImportColl
-
+	30:if:Not ($$IsObjectExists:Ledger:$Name)
     002 : NEW OBJECT : Ledger
     005 : SET VALUE : Name : $Name
-    006 : SET VALUE : Parent : "Sundry Debtors"
-	011: Insert Collection Object: LEDMAILINGDETAILS
-	011a:Set Value	: APPLICABLEFROM : "1-apr-2026"
-
-
-
-    010 : INSERT COLLECTION OBJECT : Address
-    020 : SET VALUE : Address : $Address1
-    030 : SET TARGET : ..
-	010x : INSERT COLLECTION OBJECT : Address
-    020x : SET VALUE : Address : $Address2
-    030x : SET TARGET : ..
-	010y : INSERT COLLECTION OBJECT : Address
-    020y : SET VALUE : Address : $Address3
-    030y : SET TARGET : ..
-	010z : INSERT COLLECTION OBJECT : Address
-    020z : SET VALUE : Address : $Address4
-    030z : SET TARGET : ..
-	010d : INSERT COLLECTION OBJECT : Address
-    020d : SET VALUE : Address : $Address5
-    030d : SET TARGET : ..
-	10 : Set Value : MAILINGNAME :$Name
-	11 : Set Value : COUNTRY : $Country
-	12 : Set Value: STATE :$State
-	12x: Set Value: Pincode :$Pincode
-	cc:Set Target:..
-	ff:Set Value:IncomeTaxNumber: $PanItNo
-;	ee:Set Value: : $ProvideBankDetails
-	14 : Insert Collection Object:LEDGSTREGDETAILS
-	15 : Set Value: APPLICABLEFROM :"20230401"
-	16 : Set Value:GSTREGISTRATIONTYPE :$RegistrationType
-	17 : Set Value:GSTIN :$GstUIn
-	18 : Set Target:..
-    040 : CREATE TARGET
-    050 : END WALK
+    006 : SET VALUE : Parent : $Parent;"Sundry Debtors"
+	00p : Set Value: StatusField:if $isActive=False then "Inactive" else "Active"
+	007 : Insert Collection Object: LEDMAILINGDETAILS
+	008 : Set Value	: APPLICABLEFROM : "1-apr-2026"
+    009 : INSERT COLLECTION OBJECT : Address
+    010 : SET VALUE : Address : $Address1
+    011 : SET TARGET : ..
+	012 : INSERT COLLECTION OBJECT : Address
+    013 : SET VALUE : Address : $Address2
+    014 : SET TARGET : ..
+	015 : INSERT COLLECTION OBJECT : Address
+    016 : SET VALUE : Address : $Address3
+    017 : SET TARGET : ..
+	018 : INSERT COLLECTION OBJECT : Address
+    019 : SET VALUE : Address : $Address4
+    020 : SET TARGET : ..
+	021 : INSERT COLLECTION OBJECT : Address
+    022 : SET VALUE : Address : $Address5
+    023 : SET TARGET : ..
+	024 : Set Value : MAILINGNAME :$Name
+	025 : Set Value : COUNTRY : $Country
+	026 : Set Value: STATE :$State
+	027 : Set Value: Pincode :$Pincode
+	028 : Set Target:..
+	029 : Set Value:IncomeTaxNumber: $PanItNo
+	030 : Walk Collection: BankDetails
+	031 : Set:IfsccodeVar:$IfscCode
+	032 : Insert Collection Object : PAYMENTDETAILS
+	033 : Set Value : IFSCode : ##IfsccodeVar
+	034 : Set Value : Bank Name : $BankName
+	035 : Set Value : Account Number : $AccountNo
+	036 : Set Value : PAYMENTFAVOURING : $Name
+	037 : Set Value : TRANSACTIONNAME : "Primary"
+	038 : Set Value : DEFAULTTRANSACTIONTYPE : $TransactionType
+	039 : Set Value : VirtualPaymentAddress : $UpiId
+	040 : Set Target : ..
+	041 : End Walk
+	042 : Insert Collection Object:LEDGSTREGDETAILS
+	043 : Set Value: APPLICABLEFROM :"20230401"
+	044 : Set Value:GSTREGISTRATIONTYPE :$RegistrationType
+	045 : Set Value:GSTIN :$GstUIn
+	046 : Set Target:..
+    047 : CREATE TARGET
+;    048 : Else
+;	object	: Ledger	:$Name; $MDFaccountName
+;	049 : set target
+;	;050 : SET VALUE : Parent : $Parent;"Sundry Debtors"
+;	0 : Set Target : LedMailingDetails
+;	50 : Set Value : APPLICABLEFROM :"20230401"
+;	60 : Insert Collection Object : Address
+;	70 : Set Value : Address : $Address1
+;	80 : Set Target : ..
+;
+;;90 : Set Target : ..
+;;	056 : set Target : Address[2].
+;;    057 : SET VALUE : Address : $Address2
+;;    058 : SET TARGET : ..
+;;	059 : set Target : Address[3].
+;;    060 : SET VALUE : Address : $Address3
+;;    061 : SET TARGET : ..
+;;	062 : set Target : Address[4].
+;;    063 : SET VALUE : Address : $Address4
+;;    063a : SET TARGET : ..
+;;	064 : set Target : Address[5].
+;;    065 : SET VALUE : Address : $Address5
+;;    066 : SET TARGET : ..
+;	067 : Set Value : MAILINGNAME :$Name
+;	068 : Set Value : COUNTRY : $Country
+;	069 : Set Value: STATE :$State
+;	070 : Set Value: Pincode :$Pincode
+;	071 : Set Target:..
+;	072 : Set Value:IncomeTaxNumber: $PanItNo
+;	073 : Walk Collection: BankDetails
+;	074 : Set:IfsccodeVar:$IfscCode
+;	075 : Set Target : PAYMENTDETAILS[1].
+;	076 : Set Value : IFSCode : ##IfsccodeVar
+;	077 : Set Value : Bank Name : $BankName
+;	078 : Set Value : Account Number : $AccountNo
+;	079 : Set Value : PAYMENTFAVOURING : $Name
+;	080 : Set Value : TRANSACTIONNAME : "Primary"
+;	081 : Set Value : DEFAULTTRANSACTIONTYPE : $TransactionType
+;	082 : Set Value : VirtualPaymentAddress : $UpiId
+;	083 : Set Target : ..
+;	084 : End Walk
+;	085 : set target: LEDGSTREGDETAILS[1].
+;	086 : Set Value: APPLICABLEFROM :"20230401"
+;	087 : Set Value:GSTREGISTRATIONTYPE :"Regular"
+;	;xDx:Log:##MDFaccountGSTNumber
+;	088 : Set Value:GSTIN :##MdfaccountGSTNumber
+;	089 : Set Target:..
+;	090 : alter target
+	091 : end if
+	092 : End Walk
 	
 [Collection: LedgerImportColl]
 	
-	Data Source:  HTTP JSON: "http://localhost:3000/api/ledger"
+	Data Source:  HTTP JSON: "http://v35011.22189.tallyprimecloud.in:3501/api/ledger"
 	JSON Object Path:data:1
 	
 
+	
+[#Part: MST LED Explode Sundry]
+	
+	Add:Line: Mst InactiveActive
+	
+[Line: Mst InactiveActive]
+	
+	Field: Long Prompt, StatusField
+	Local: Field: Long Prompt:Info: "Status"
+	
+[Field: StatusField]
+	
+	Use: Name Field
+	Storage: StatusField
+;	Table: StatusField
+;	Show Table: Always
+	
+[System: Udf]
+	
+	StatusField: String: 7891
+	
+[Collection: StatusField]
+	
+	Title: "List of Status"
+	List Name: "Inactive"
+	List Name: "Active"
 	

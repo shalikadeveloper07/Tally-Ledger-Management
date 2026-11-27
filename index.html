@@ -374,14 +374,14 @@
                         </div>
                     </div>
 
-                    <!-- Active/Inactive (Boolean isActive) -->
+                    <!-- Is Active (Yes/No -> Boolean isActive) -->
                     <div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block mb-1">Status</label>
+                                <label class="block mb-1">Is Active?</label>
                                 <select id="fIsActive" class="tally-input">
-                                    <option value="true">Active</option>
-                                    <option value="false">Inactive</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
                                 </select>
                             </div>
                         </div>
@@ -424,7 +424,7 @@
                                 <th class="py-3 px-4 whitespace-nowrap">IFS Code</th>
                                 <th class="py-3 px-4 whitespace-nowrap">Bank Name</th>
                                 <th class="py-3 px-4 whitespace-nowrap">UPI ID</th>
-                                <th class="py-3 px-4 text-center whitespace-nowrap">Status</th>
+                                <th class="py-3 px-4 text-center whitespace-nowrap">isActive</th>
                                 <th class="py-3 px-4 text-center whitespace-nowrap">Action</th>
                             </tr>
                         </thead>
@@ -1357,7 +1357,11 @@
                 GstUIn: document.getElementById('fGstUIn').value.trim().toUpperCase(),
                 PanItNo: document.getElementById('fPanItNo').value.trim().toUpperCase(),
                 ProvideBankDetails: effectiveProvideBank,
-                BankDetails: effectiveProvideBank === 'Yes' ? currentBankDetails : null,
+                TransactionType: effectiveProvideBank === 'Yes' ? (currentBankDetails.TransactionType || 'e-Fund Transfer') : '',
+                AccountNo: effectiveProvideBank === 'Yes' ? (currentBankDetails.AccountNo || '') : '',
+                IfscCode: effectiveProvideBank === 'Yes' ? (currentBankDetails.IfscCode || '') : '',
+                BankName: effectiveProvideBank === 'Yes' ? (currentBankDetails.BankName || '') : '',
+                UpiId: effectiveProvideBank === 'Yes' ? (currentBankDetails.UpiId || '') : '',
                 isActive: isActiveBool
             };
 
@@ -1486,7 +1490,7 @@
                         : '<span class="text-slate-400 italic font-sans">-</span>'}
                         </td>
                         <td class="py-2.5 px-4 text-center whitespace-nowrap ${isInactive ? 'text-rose-600' : 'text-emerald-600'}">
-                            ${isInactive ? 'Inactive' : 'Active'}
+                            ${isInactive ? 'No' : 'Yes'}
                         </td>
                         <td class="py-2.5 px-4 text-center whitespace-nowrap">
                             <div class="inline-flex items-center gap-1.5">

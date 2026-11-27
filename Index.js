@@ -6,9 +6,6 @@ const { connectDB, getCollection } = require("./config/db");
 const app = express();
 app.use(express.json());
 
-// Connect to MongoDB
-connectDB();
-
 // Enable CORS
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -27,6 +24,34 @@ app.get('/public/index.html', (req, res) => {
 });
 app.use(express.static(__dirname));
 
+// Helper: build flat bank fields (TransactionType, AccountNo, IfscCode, BankName, UpiId)
+function buildBankFields(ProvideBankDetails, BankDetails, body = {}) {
+    const txType = BankDetails?.TransactionType ?? body.TransactionType ?? "e-Fund Transfer";
+    const accNo  = BankDetails?.AccountNo       ?? body.AccountNo       ?? "";
+    const ifsc   = BankDetails?.IfscCode        ?? body.IfscCode        ?? "";
+    const bName  = BankDetails?.BankName        ?? body.BankName        ?? "";
+    const upiId  = BankDetails?.UpiId           ?? body.UpiId           ?? "";
+
+    const isBankProvided = ProvideBankDetails === "Yes" || Boolean(accNo || bName || ifsc || upiId);
+    if (!isBankProvided) {
+        return {
+            isBankProvided: false,
+            bankFields: { TransactionType: "", AccountNo: "", IfscCode: "", BankName: "", UpiId: "" }
+        };
+    }
+
+    return {
+        isBankProvided: true,
+        bankFields: {
+            TransactionType: String(txType || "e-Fund Transfer").trim(),
+            AccountNo:       String(accNo).trim(),
+            IfscCode:        String(ifsc).trim().toUpperCase(),
+            BankName:        String(bName).trim(),
+            UpiId:           String(upiId).trim()
+        }
+    };
+}
+
 // ─── 1. ADD LEDGER ──────────────────────────────────────────────────────────
 app.post('/api/ledger', async (req, res) => {
     try {
@@ -44,15 +69,8 @@ app.post('/api/ledger', async (req, res) => {
         if (dup)
             return res.status(409).json({ success: false, message: `Ledger "${Name.trim()}" already exists. Duplicate not allowed.` });
 
-        const isBankProvided = ProvideBankDetails === "Yes" || Boolean(BankDetails?.AccountNo || BankDetails?.BankName || BankDetails?.UpiId);
-        const bDetails = isBankProvided ? {
-            TransactionType: BankDetails?.TransactionType || "e-Fund Transfer",
-            AccountNo:  BankDetails?.AccountNo  ? String(BankDetails.AccountNo).trim()  : "",
-            IfscCode:   BankDetails?.IfscCode   ? String(BankDetails.IfscCode).trim().toUpperCase() : "",
-            BankName:   BankDetails?.BankName   ? String(BankDetails.BankName).trim()   : "",
-            UpiId:      BankDetails?.UpiId      ? String(BankDetails.UpiId).trim()      : "",
-            CrossUsing: BankDetails?.CrossUsing ? String(BankDetails.CrossUsing).trim() : ""
-        } : null;
+        const { isBankProvided, bankFields } = buildBankFields(ProvideBankDetails, BankDetails, req.body);
+        const now = new Date();
 
         const newLedger = {
             Name: Name.trim(),
@@ -66,18 +84,12 @@ app.post('/api/ledger', async (req, res) => {
             Country: Country ? Country.trim() : "India",
             Pincode: Pincode ? Pincode.trim() : "",
             ProvideBankDetails: isBankProvided ? "Yes" : "No",
-            BankDetails: bDetails,
-            TransactionType: bDetails ? bDetails.TransactionType : "",
-            AccountNo:       bDetails ? bDetails.AccountNo  : "",
-            IfscCode:        bDetails ? bDetails.IfscCode   : "",
-            BankName:        bDetails ? bDetails.BankName   : "",
-            UpiId:           bDetails ? bDetails.UpiId      : "",
-            CrossUsing:      bDetails ? bDetails.CrossUsing : "",
+            ...bankFields,
             PanItNo:          PanItNo          ? PanItNo.trim().toUpperCase()          : "",
             RegistrationType: RegistrationType ? RegistrationType.trim()               : "Regular",
             GstUIn:           GstUIn           ? GstUIn.trim().toUpperCase()           : "",
             isActive: (isActive === false || isActive === 'false') ? false : true,
-            createdAt: new Date()
+            createdAt: now
         };
 
         const result = await getCollection().insertOne(newLedger);
@@ -91,7 +103,10 @@ app.post('/api/ledger', async (req, res) => {
 // ─── 2. GET ALL LEDGERS ─────────────────────────────────────────────────────
 app.get('/api/ledger', async (req, res) => {
     try {
-        const data = await getCollection().find({}).sort({ createdAt: -1 }).toArray();
+        const data = await getCollection()
+            .find({}, { projection: { BankDetails: 0, BankDetailsHistory: 0, CrossUsing: 0 } })
+            .sort({ createdAt: -1 })
+            .toArray();
         res.status(200).json({ success: true, count: data.length, data });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -103,7 +118,10 @@ app.get('/api/ledger/:id', async (req, res) => {
     try {
         let queryId;
         try { queryId = new mongoose.Types.ObjectId(req.params.id); } catch { queryId = req.params.id; }
-        const ledger = await getCollection().findOne({ _id: queryId });
+        const ledger = await getCollection().findOne(
+            { _id: queryId },
+            { projection: { BankDetails: 0, BankDetailsHistory: 0, CrossUsing: 0 } }
+        );
         if (!ledger) return res.status(404).json({ success: false, message: "Ledger not found" });
         res.status(200).json({ success: true, data: ledger });
     } catch (error) {
@@ -131,15 +149,7 @@ app.put('/api/ledger/:id', async (req, res) => {
         if (dupOther)
             return res.status(409).json({ success: false, message: `Ledger "${Name.trim()}" already exists. Duplicate not allowed.` });
 
-        const isBankProvided = ProvideBankDetails === "Yes" || Boolean(BankDetails?.AccountNo || BankDetails?.BankName || BankDetails?.UpiId);
-        const bDetails = isBankProvided ? {
-            TransactionType: BankDetails?.TransactionType || "e-Fund Transfer",
-            AccountNo:  BankDetails?.AccountNo  ? String(BankDetails.AccountNo).trim()  : "",
-            IfscCode:   BankDetails?.IfscCode   ? String(BankDetails.IfscCode).trim().toUpperCase() : "",
-            BankName:   BankDetails?.BankName   ? String(BankDetails.BankName).trim()   : "",
-            UpiId:      BankDetails?.UpiId      ? String(BankDetails.UpiId).trim()      : "",
-            CrossUsing: BankDetails?.CrossUsing ? String(BankDetails.CrossUsing).trim() : ""
-        } : null;
+        const { isBankProvided, bankFields } = buildBankFields(ProvideBankDetails, BankDetails, req.body);
 
         const updateData = {
             Name: Name.trim(),
@@ -153,13 +163,7 @@ app.put('/api/ledger/:id', async (req, res) => {
             Country: Country ? Country.trim() : "India",
             Pincode: Pincode ? Pincode.trim() : "",
             ProvideBankDetails: isBankProvided ? "Yes" : "No",
-            BankDetails: bDetails,
-            TransactionType: bDetails ? bDetails.TransactionType : "",
-            AccountNo:       bDetails ? bDetails.AccountNo  : "",
-            IfscCode:        bDetails ? bDetails.IfscCode   : "",
-            BankName:        bDetails ? bDetails.BankName   : "",
-            UpiId:           bDetails ? bDetails.UpiId      : "",
-            CrossUsing:      bDetails ? bDetails.CrossUsing : "",
+            ...bankFields,
             PanItNo:          PanItNo          ? PanItNo.trim().toUpperCase()          : "",
             RegistrationType: RegistrationType ? RegistrationType.trim()               : "Regular",
             GstUIn:           GstUIn           ? GstUIn.trim().toUpperCase()           : "",
@@ -167,7 +171,18 @@ app.put('/api/ledger/:id', async (req, res) => {
             updatedAt: new Date()
         };
 
-        const result = await getCollection().findOneAndUpdate({ _id: queryId }, { $set: updateData }, { returnDocument: 'after' });
+        const result = await getCollection().findOneAndUpdate(
+            { _id: queryId },
+            {
+                $set: updateData,
+                $unset: {
+                    BankDetails: "",
+                    BankDetailsHistory: "",
+                    CrossUsing: ""
+                }
+            },
+            { returnDocument: 'after' }
+        );
         const updatedDoc = result && result.value !== undefined ? result.value : result;
         if (!updatedDoc) return res.status(404).json({ success: false, message: "Ledger not found" });
 
@@ -214,11 +229,13 @@ const PORT = 3501;
 const HOST = "0.0.0.0";
 const DOMAIN = "http://v35011.22189.tallyprimecloud.in";
 
-app.listen(PORT, HOST, () => {
-    console.log("================================");
-    console.log("Node.js Server Started");
-    console.log(`Server URL: ${DOMAIN}:${PORT}`);
-    console.log(`Frontend: ${DOMAIN}:${PORT}`);
-    console.log(`Ledger API: ${DOMAIN}:${PORT}/api/ledger`);
-    console.log("================================");
+connectDB().then(() => {
+    app.listen(PORT, HOST, () => {
+        console.log("================================");
+        console.log("Node.js Server Started");
+        console.log(`Server URL: ${DOMAIN}:${PORT}`);
+        console.log(`Frontend: ${DOMAIN}:${PORT}`);
+        console.log(`Ledger API: ${DOMAIN}:${PORT}/api/ledger`);
+        console.log("================================");
+    });
 });

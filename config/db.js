@@ -37,22 +37,56 @@ const COLLECTION_NAME = process.env.COLLECTION_NAME || "ledgerDB";
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(MONGO_URI);
+        await mongoose.connect(MONGO_URI, {
+            serverSelectionTimeoutMS: 15000,
+            connectTimeoutMS: 15000
+        });
         console.log("MongoDB Connected Successfully");
 
-        // Ensure all existing documents have isActive boolean set
-        try {
-            await mongoose.connection.collection(COLLECTION_NAME).updateMany(
-                { $or: [{ isActive: { $exists: false } }, { isActive: null }] },
-                { $set: { isActive: true } }
-            );
-            await mongoose.connection.collection(COLLECTION_NAME).updateMany(
-                { Inactive: { $exists: true } },
-                { $unset: { Inactive: "" } }
-            );
-        } catch (e) {
-            // ignore
-        }
+        // Run cleanup/migration in background so server starts immediately
+        (async () => {
+            try {
+                const col = mongoose.connection.collection(COLLECTION_NAME);
+                await col.updateMany(
+                    { $or: [{ isActive: { $exists: false } }, { isActive: null }] },
+                    { $set: { isActive: true } }
+                );
+                await col.updateMany(
+                    { Inactive: { $exists: true } },
+                    { $unset: { Inactive: "" } }
+                );
+                const docsWithBd = await col.find({ BankDetails: { $exists: true } }).toArray();
+                for (const doc of docsWithBd) {
+                    const bd = doc.BankDetails || {};
+                    await col.updateOne(
+                        { _id: doc._id },
+                        {
+                            $set: {
+                                TransactionType: doc.TransactionType || bd.TransactionType || "",
+                                AccountNo: doc.AccountNo || bd.AccountNo || "",
+                                IfscCode: doc.IfscCode || bd.IfscCode || "",
+                                BankName: doc.BankName || bd.BankName || "",
+                                UpiId: doc.UpiId || bd.UpiId || ""
+                            },
+                            $unset: {
+                                BankDetails: "",
+                                BankDetailsHistory: "",
+                                CrossUsing: ""
+                            }
+                        }
+                    );
+                }
+                if (docsWithBd.length > 0) {
+                    console.log(`Removed BankDetails object from ${docsWithBd.length} existing document(s)`);
+                }
+                await col.updateMany(
+                    { UpiId: { $exists: false } },
+                    { $set: { UpiId: "" } }
+                );
+            } catch (e) {
+                console.error("Migration error:", e.message);
+            }
+        })();
     } catch (err) {
         console.error("MongoDB Error:", err.message);
         process.exit(1);
